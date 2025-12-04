@@ -1,0 +1,119 @@
+from abc import ABC, abstractmethod
+import math
+
+class Configuration:
+    def __init__(self, x: float, y: float):
+        self.x = x
+        self.y = y
+    def to_tuple(self) -> tuple[float, float]:
+        return (self.x, self.y)
+
+    def distance_to(self, other: "Configuration") -> float:
+        dx = self.x - other.x
+        dy = self.y - other.y
+        return math.hypot(dx, dy)
+
+class PathPlanner(ABC):
+    def __init__(self,start: Configuration,goal: Configuration,bounds: tuple[tuple[float, float], tuple[float, float]]):
+        self.start = start
+        self.goal = goal
+        self.bounds = bounds
+        self.obstacles: list = []
+        self.path: list[Configuration] | None = None
+
+    def set_obstacles(self, obstacles: list):
+        self.obstacles = obstacles
+
+    def _point_in_circle(self, x: float, y: float, obs: dict) -> bool:
+        cx, cy = None, None
+        if "center" in obs:
+            cx, cy = obs["center"]
+        else:
+            cx = obs.get("cx", None)
+            cy = obs.get("cy", None)
+
+        if cx is None or cy is None:
+            return False
+
+        r = obs.get("radius", obs.get("r", 0.0))
+        dx = x - cx
+        dy = y - cy
+        return dx * dx + dy * dy <= r * r
+    
+    def _point_in_rect(self, x: float, y: float, obs: dict) -> bool:
+
+        if all(k in obs for k in ("xmin", "xmax", "ymin", "ymax")):
+            return (obs["xmin"] <= x <= obs["xmax"] and
+                    obs["ymin"] <= y <= obs["ymax"])
+        if all(k in obs for k in ("x", "y", "width", "height")):
+            x_min = obs["x"]
+            y_min = obs["y"]
+            x_max = x_min + obs["width"]
+            y_max = y_min + obs["height"]
+            return (x_min <= x <= x_max and y_min <= y <= y_max)
+        return False
+    
+    def _point_in_polygon(self, x: float, y: float, obs: dict) -> bool:
+        verts = obs.get("vertices", obs.get("points", []))
+        if not verts:
+            return False
+        inside = False
+        n = len(verts)
+        for i in range(n):
+            x1, y1 = verts[i]
+            x2, y2 = verts[(i + 1) % n]
+            if (y1 > y) != (y2 > y):
+                denom = (y2 - y1)
+                if abs(denom) < 1e-9:
+                    continue
+                x_intersect = x1 + (y - y1) * (x2 - x1) / denom
+                if x_intersect >= x:
+                    inside = not inside
+
+        return inside
+    def _point_in_any_obstacle(self, x: float, y: float) -> bool:
+        for obs in self.obstacles:
+            t = obs.get("type", "circle")
+            if t == "circle":
+                if self._point_in_circle(x, y, obs):
+                    return True
+            elif t == "rect":
+                if self._point_in_rect(x, y, obs):
+                    return True
+            elif t == "polygon":
+                if self._point_in_polygon(x, y, obs):
+                    return True
+        return False
+    def is_collision_free(self,
+                          config1: Configuration,
+                          config2: Configuration) -> bool:
+        x1, y1 = config1.x, config1.y
+        x2, y2 = config2.x, config2.y
+
+        dx = x2 - x1
+        dy = y2 - y1
+        length = math.hypot(dx, dy)
+        if length < 1e-9:
+            return not self._point_in_any_obstacle(x1, y1)
+        step = 0.1  
+        num_samples = max(1, int(length / step))
+
+        for i in range(num_samples + 1):
+            t = i / float(num_samples)
+            x = x1 + t * dx
+            y = y1 + t * dy
+            if self._point_in_any_obstacle(x, y):
+                return False
+
+        return True
+    @abstractmethod
+    def plan(self) -> bool:
+        pass
+
+    @abstractmethod
+    def get_planning_time(self) -> float:
+        pass
+
+    @abstractmethod
+    def get_num_nodes(self) -> int:
+        pass
