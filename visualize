@@ -1,0 +1,53 @@
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from matplotlib.collections import PatchCollection
+
+from path_planner_interface import Configuration
+def draw_obstacles(ax, obstacles):
+    patch_list = []
+    for obs in obstacles:
+        t = obs.get("type")
+
+        if t == "circle":
+            (cx, cy) = obs["center"]
+            r = obs["radius"]
+            circle = patches.Circle((cx, cy), r)
+            patch_list.append(circle)
+        elif t == "rect":
+            x = obs["x"]
+            y = obs["y"]
+            w = obs["width"]
+            h = obs["height"]
+            rect = patches.Rectangle((x, y), w, h)
+            patch_list.append(rect)
+        elif t == "polygon":
+            pts = obs["points"]
+            poly = patches.Polygon(pts, closed=True)
+            patch_list.append(poly)
+    if patch_list:
+        pc = PatchCollection(patch_list, facecolor="lightgray", edgecolor="black", alpha=0.5)
+        ax.add_collection(pc)
+
+def plot_planner(planner, obstacles, title="Path planning result"):
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.set_title(title)
+
+   
+    bounds = getattr(planner, "bounds", ((0, 10), (0, 10)))
+    xmin, xmax = bounds[0]
+    ymin, ymax = bounds[1]
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+    ax.set_aspect("equal")
+    draw_obstacles(ax, obstacles)
+    path = planner.get_path()
+    if path and len(path) > 1:
+        xs = [p.x for p in path]
+        ys = [p.y for p in path]
+        ax.plot(xs, ys, color="red", linewidth=2, label="Path")
+        ax.scatter(xs[0], ys[0], color="green", s=50, label="Start")
+        ax.scatter(xs[-1], ys[-1], color="red", s=50, label="Goal")
+    ax.legend()
+    ax.grid(True)
+    plt.show()
+
