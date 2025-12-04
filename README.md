@@ -68,8 +68,9 @@ k\_neighbors \= best value found (10)
 
 **5\. Bar Plots**
 
-![][image1]  
-![][image2]  
+![Image](https://github.com/user-attachments/assets/266ed214-3410-41ae-afc7-5b1c6d74d563)
+
+![Image](https://github.com/user-attachments/assets/c7908e2b-6435-4e2c-9e33-a4f9f66432d4)
 **6\. Analysis**
 
 6.1 Computational Efficiency
@@ -108,7 +109,7 @@ k\_neighbors \= best value found (10)
 	Produces a collision-free 3D path  
 	Visualized using Matplotlib 3D plotting ( Axes3D )
 
-	![][image3]
+![Image](https://github.com/user-attachments/assets/94079cf7-1d91-4fb0-963d-40851c5dbc3d)
 
 **ROBO 202 REPORT ( Polymorphism and OOP )**
 
@@ -136,7 +137,7 @@ Inheritance:
 	PRMPlanner → PathPlanner  
 	Configuration3D → Configuration  
 	  
-![][image4]
+![Image](https://github.com/user-attachments/assets/0f97f131-c756-4e70-95c6-03eb6a66b96c)
 
 **3\. Polymorphism Explanation** 
 
@@ -158,15 +159,16 @@ This makes the code flexible and simple.
 
 1. Abstract Class
 
-![][image5]
+![Image](https://github.com/user-attachments/assets/320f934f-d335-4283-b8a5-bbc1d0f89574)
 
 2. RRTplanner Overriding plan ()  
      
-   ![][image6]
+![Image](https://github.com/user-attachments/assets/6ca8b07e-e472-4ff9-b500-16d7d8a6dfd3)
 
 3. Polymorphic test\_planner()  
      
-   ![][image7]
+
+![Image](https://github.com/user-attachments/assets/70987761-2d5a-4718-95c5-c2dfe461011c)
 
 **5\. Visualizations** 
 
@@ -185,17 +187,5 @@ PRM 10000 samples figure
 	Performance analysis shows that RRT is faster, while PRM gives better paths.  
 The 3D extension demonstrates that system can be easily scaled to higher dimensions.
 
-![Image](https://github.com/user-attachments/assets/266ed214-3410-41ae-afc7-5b1c6d74d563)
 
-![Image](https://github.com/user-attachments/assets/c7908e2b-6435-4e2c-9e33-a4f9f66432d4)
-
-![Image](https://github.com/user-attachments/assets/94079cf7-1d91-4fb0-963d-40851c5dbc3d)
-
-![Image](https://github.com/user-attachments/assets/0f97f131-c756-4e70-95c6-03eb6a66b96c)
-
-![Image](https://github.com/user-attachments/assets/320f934f-d335-4283-b8a5-bbc1d0f89574)
-
-![Image](https://github.com/user-attachments/assets/6ca8b07e-e472-4ff9-b500-16d7d8a6dfd3)
-
-![Image](https://github.com/user-attachments/assets/70987761-2d5a-4718-95c5-c2dfe461011c)
 
