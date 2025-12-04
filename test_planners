@@ -1,0 +1,80 @@
+
+
+import random
+import math
+import time
+from path_planner_interface import PathPlanner, Configuration
+def compute_path_length(path):
+    if not path or len(path) < 2:
+        return 0.0
+    total = 0.0
+    for i in range(len(path) - 1):
+        p1 = path[i]
+        p2 = path[i + 1]
+        dx = p1.x - p2.x
+        dy = p1.y - p2.y
+        total += math.hypot(dx, dy)
+    return total
+def generate_random_obstacles(bounds, num_obstacles):
+    xmin, xmax = bounds[0]
+    ymin, ymax = bounds[1]
+    obstacles = []
+    for _ in range(num_obstacles):
+        shape = random.choice(["circle", "rect", "polygon"])
+
+        if shape == "circle":
+            r = random.uniform(0.3, 1.0)
+            cx = random.uniform(xmin + r, xmax - r)
+            cy = random.uniform(ymin + r, ymax - r)
+            obstacles.append({
+                "type": "circle","center": (cx, cy),"radius": r,})
+
+        elif shape == "rect":
+            w = random.uniform(0.5, 2.0)
+            h = random.uniform(0.5, 2.0)
+            x = random.uniform(xmin, xmax - w)
+            y = random.uniform(ymin, ymax - h)
+            obstacles.append({
+                "type": "rect","x": x,"y": y,"width": w,"height": h,})
+        else:  # polygon
+            cx = random.uniform(xmin + 1.0, xmax - 1.0)
+            cy = random.uniform(ymin + 1.0, ymax - 1.0)
+            points = []
+            for _ in range(5):  # 5-sided polygon
+                angle = random.uniform(0, 2 * math.pi)
+                r = random.uniform(0.4, 1.2)
+                px = cx + r * math.cos(angle)
+                py = cy + r * math.sin(angle)
+                points.append((px, py))
+            obstacles.append({"type": "polygon","points": points,})
+
+    return obstacles
+
+def test_planner(planner: PathPlanner,start: Configuration,goal: Configuration,obstacles,visualize: bool = False,title: str = "") -> dict:
+
+    planner.set_obstacles(obstacles)
+    t0 = time.time()
+    success = planner.plan()
+    t1 = time.time()
+
+    path = planner.get_path()
+    path_length = compute_path_length(path)
+    try:
+        planning_time = planner.get_planning_time()
+    except AttributeError:
+        planning_time = t1 - t0
+
+    try:
+        num_nodes = planner.get_num_nodes()
+    except AttributeError:
+        num_nodes = 0
+    if visualize and success:
+        from visualize import plot_planner
+        plot_title = title if title else planner.__class__.__name__
+        plot_planner(planner, obstacles, plot_title)
+
+    return {"success": success,"path_length": path_length,"planning_time": planning_time,"num_nodes": num_nodes,}
+
+if __name__ == "__main__":
+    print("This file provides test_planner() and generate_random_obstacles().")
+    print("Use them from your other scripts (bar plots, visualizations, etc.).")
