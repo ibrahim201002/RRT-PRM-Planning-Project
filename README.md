@@ -109,7 +109,7 @@ k\_neighbors \= best value found (10)
 	Produces a collision-free 3D path  
 	Visualized using Matplotlib 3D plotting ( Axes3D )
 
-![Image](https://github.com/user-attachments/assets/94079cf7-1d91-4fb0-963d-40851c5dbc3d)
+![Image](https://github.com/user-attachments/assets/0f97f131-c756-4e70-95c6-03eb6a66b96c)
 
 **ROBO 202 REPORT ( Polymorphism and OOP )**
 
@@ -136,8 +136,8 @@ Inheritance:
 	RRTPlanner → PathPlanner  
 	PRMPlanner → PathPlanner  
 	Configuration3D → Configuration  
-	  
-![Image](https://github.com/user-attachments/assets/0f97f131-c756-4e70-95c6-03eb6a66b96c)
+![Image](https://github.com/user-attachments/assets/94079cf7-1d91-4fb0-963d-40851c5dbc3d)
+
 
 **3\. Polymorphism Explanation** 
 
