@@ -174,13 +174,13 @@ This makes the code flexible and simple.
 
 RRT 10000 iteration figure 
 
-![Image](https://github.com/user-attachments/assets/38614dcd-9e58-4544-a7d1-071544d35d3b)
+
 
 ![Image](https://github.com/user-attachments/assets/94b16ef8-93f4-44bd-890b-846cdfd6709b)
 
 PRM 10000 samples figure 
 
-![Image](https://github.com/user-attachments/assets/94b16ef8-93f4-44bd-890b-846cdfd6709b)
+![Image](https://github.com/user-attachments/assets/38614dcd-9e58-4544-a7d1-071544d35d3b)
 
 **6\. Conclusion**   
 	  
